@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ filiere.nom }} - Détails{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_orientation_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_orientation_filieres') }}">Filières</a></li>
+            <li class="breadcrumb-item active">{{ filiere.nom }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-3">{{ filiere.nom }}</h1>
+
+                    <p class="text-muted mb-4">
+                        <i class="bi bi-building me-1"></i>
+                        <a href="{{ path('app_orientation_ecole_detail', {id: filiere.ecole.id}) }}">
+                            {{ filiere.ecole.nom }}
+                        </a>
+                        {% if filiere.ecole.estVerifiee %}
+                            <i class="bi bi-patch-check-fill text-primary" title="École vérifiée"></i>
+                        {% endif %}
+                    </p>
+
+                    <h5 class="h6 mb-3">Description</h5>
+                    <p class="text-muted">{{ filiere.description ?? 'Aucune description disponible.' }}</p>
+
+                    {% if filiere.debouches %}
+                        <h5 class="h6 mb-3 mt-4">
+                            <i class="bi bi-briefcase me-2"></i>Débouchés professionnels
+                        </h5>
+                        <p class="text-muted">{{ filiere.debouches }}</p>
+                    {% endif %}
+
+                    {% if filiere.matieresImportantes %}
+                        <h5 class="h6 mb-3 mt-4">
+                            <i class="bi bi-journal-text me-2"></i>Matières importantes
+                        </h5>
+                        <p class="text-muted">{{ filiere.matieresImportantes }}</p>
+                    {% endif %}
+
+                    {% if filiere.documentsRequis %}
+                        <h5 class="h6 mb-3 mt-4">
+                            <i class="bi bi-file-earmark-text me-2"></i>Documents requis
+                        </h5>
+                        <p class="text-muted">{{ filiere.documentsRequis }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="h6 mb-4">Critères d'admission</h5>
+
+                    {% if filiere.moyenneMinimale %}
+                        <div class="mb-3">
+                            <i class="bi bi-graph-up text-primary me-2"></i>
+                            <strong>Moyenne minimale :</strong><br>
+                            <span class="text-muted fs-5">{{ filiere.moyenneMinimale }}/20</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <i class="bi bi-clock text-info me-2"></i>
+                        <strong>Durée de formation :</strong><br>
+                        <span class="text-muted">{{ filiere.dureeAnnees }} an(s)</span>
+                    </div>
+
+                    {% if filiere.coutAnnuel %}
+                        <div class="mb-3">
+                            <i class="bi bi-currency-dollar text-success me-2"></i>
+                            <strong>Coût annuel :</strong><br>
+                            <span class="text-muted">{{ filiere.coutAnnuel|number_format(0, ',', ' ') }} FCFA</span>
+                        </div>
+                    {% endif %}
+
+                    {% if filiere.diplomeDelivre %}
+                        <div class="mb-3">
+                            <i class="bi bi-award text-warning me-2"></i>
+                            <strong>Diplôme délivré :</strong><br>
+                            <span class="text-muted">{{ filiere.diplomeDelivre }}</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <i class="bi bi-mortarboard text-danger me-2"></i>
+                        <strong>Types de BAC acceptés :</strong><br>
+                        {% for typeBac in filiere.typeBacsAcceptes %}
+                            <span class="badge bg-primary me-1 mt-1">{{ typeBac.libelle }}</span>
+                        {% endfor %}
+                    </div>
+
+                    {% if filiere.concoursObligatoire %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            <strong>Concours d'entrée obligatoire</strong>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{{ path('app_orientation_ecole_detail', {id: filiere.ecole.id}) }}" class="btn btn-primary">
+                            <i class="bi bi-building me-2"></i>Voir l'école
+                        </a>
+                        <a href="{{ path('app_orientation_filieres') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Retour aux filières
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

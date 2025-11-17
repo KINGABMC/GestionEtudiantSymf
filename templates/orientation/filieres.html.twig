@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche de Filières - Orientation{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <h2 class="h3 mb-4">
+        <i class="bi bi-book me-2"></i>Recherche de Filières
+    </h2>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" action="{{ path('app_orientation_filieres') }}">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Filtrer par type de BAC</label>
+                        <select class="form-select" name="typeBac" onchange="this.form.submit()">
+                            <option value="">Tous les types de BAC</option>
+                            {% for typeBac in typesBac %}
+                                <option value="{{ typeBac.id }}" {% if selectedTypeBac and selectedTypeBac.id == typeBac.id %}selected{% endif %}>
+                                    {{ typeBac.libelle }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <a href="{{ path('app_orientation_filieres') }}" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-x-circle me-1"></i>Réinitialiser
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if selectedTypeBac %}
+        <div class="alert alert-info mb-4">
+            <i class="bi bi-filter me-2"></i>
+            Filières compatibles avec <strong>{{ selectedTypeBac.libelle }}</strong>
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        {% for filiere in filieres %}
+            <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="card-title h6 mb-2">{{ filiere.nom }}</h5>
+
+                        <p class="text-muted small mb-3">
+                            <i class="bi bi-building me-1"></i>{{ filiere.ecole.nom }}
+                            {% if filiere.ecole.estVerifiee %}
+                                <i class="bi bi-patch-check-fill text-primary" title="École vérifiée"></i>
+                            {% endif %}
+                        </p>
+
+                        {% if filiere.description %}
+                            <p class="card-text small text-muted mb-3">
+                                {{ filiere.description|slice(0, 150) }}...
+                            </p>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            {% if filiere.moyenneMinimale %}
+                                <span class="badge bg-light text-dark border me-2">
+                                    <i class="bi bi-graph-up me-1"></i>Min: {{ filiere.moyenneMinimale }}/20
+                                </span>
+                            {% endif %}
+                            <span class="badge bg-light text-dark border me-2">
+                                <i class="bi bi-clock me-1"></i>{{ filiere.dureeAnnees }} ans
+                            </span>
+                            {% if filiere.concoursObligatoire %}
+                                <span class="badge bg-warning">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>Concours
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">
+                                <strong>Types de BAC acceptés :</strong>
+                            </small>
+                            {% for typeBac in filiere.typeBacsAcceptes %}
+                                <span class="badge bg-primary me-1">{{ typeBac.code }}</span>
+                            {% endfor %}
+                        </div>
+
+                        {% if filiere.coutAnnuel %}
+                            <div class="small text-muted mb-3">
+                                <i class="bi bi-currency-dollar me-1"></i>
+                                <strong>{{ filiere.coutAnnuel|number_format(0, ',', ' ') }} FCFA/an</strong>
+                            </div>
+                        {% endif %}
+
+                        <a href="{{ path('app_orientation_filiere_detail', {id: filiere.id}) }}" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="bi bi-eye me-1"></i>Voir les détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>Aucune filière ne correspond à vos critères.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if nbrPages > 1 %}
+        {% include 'components/pagination.html.twig' with {
+            'nbrPages': nbrPages,
+            'currentPage': currentPage,
+            'pathname': 'app_orientation_filieres',
+            'extraParams': selectedTypeBac ? {'typeBac': selectedTypeBac.id} : {}
+        } %}
+    {% endif %}
+</div>
+{% endblock %}

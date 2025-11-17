@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conseiller Intelligent - Orientation{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-robot text-primary" style="font-size: 3rem;"></i>
+                        <h2 class="h3 mt-3 mb-2">Conseiller Intelligent d'Orientation</h2>
+                        <p class="text-muted">Recevez des recommandations personnalisées pour votre avenir</p>
+                    </div>
+
+                    {% include 'components/messageflash.html.twig' with {'messages': app.flashes()} %}
+
+                    <form method="post" action="{{ path('app_orientation_conseiller') }}">
+                        <div class="mb-4">
+                            <label for="typeBac" class="form-label fw-semibold">
+                                <i class="bi bi-mortarboard me-1"></i>Type de BAC
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select form-select-lg" id="typeBac" name="typeBac" required>
+                                <option value="">Sélectionnez votre type de BAC</option>
+                                {% for typeBac in typesBac %}
+                                    <option value="{{ typeBac.id }}">{{ typeBac.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Sélectionnez le type de BAC que vous avez obtenu
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="moyenne" class="form-label fw-semibold">
+                                <i class="bi bi-graph-up me-1"></i>Moyenne générale
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                max="20"
+                                class="form-control form-control-lg"
+                                id="moyenne"
+                                name="moyenne"
+                                placeholder="Ex: 12.50"
+                                required
+                            >
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Votre moyenne au baccalauréat (sur 20)
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="centresInteret" class="form-label fw-semibold">
+                                <i class="bi bi-heart me-1"></i>Centres d'intérêt
+                            </label>
+                            <textarea
+                                class="form-control"
+                                id="centresInteret"
+                                name="centresInteret"
+                                rows="3"
+                                placeholder="Ex: informatique, santé, gestion, art, ingénierie..."
+                            ></textarea>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Séparez vos centres d'intérêt par des virgules
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info border-0">
+                            <i class="bi bi-lightbulb me-2"></i>
+                            <strong>Astuce :</strong> Plus vous fournissez d'informations précises, plus nos recommandations seront adaptées à votre profil.
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-magic me-2"></i>Obtenir mes recommandations
+                            </button>
+                            <a href="{{ path('app_orientation_home') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Retour à l'accueil
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

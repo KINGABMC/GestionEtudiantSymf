@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Orientation des Bacheliers - Accueil{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">Plateforme d'Orientation des Bacheliers</h1>
+        <p class="lead text-muted">Trouvez la filière et l'école qui correspondent à votre profil</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-compass text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="card-title h4 mb-3">Conseiller Intelligent</h3>
+                    <p class="card-text text-muted">
+                        Obtenez des recommandations personnalisées basées sur votre type de BAC, vos notes et vos centres d'intérêt
+                    </p>
+                    <a href="{{ path('app_orientation_conseiller') }}" class="btn btn-primary btn-lg mt-3">
+                        <i class="bi bi-arrow-right me-2"></i>Commencer
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-building text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="card-title h4 mb-3">Rechercher une École</h3>
+                    <p class="card-text text-muted">
+                        Explorez les écoles publiques et privées selon vos critères de localisation et de budget
+                    </p>
+                    <a href="{{ path('app_orientation_ecoles') }}" class="btn btn-success btn-lg mt-3">
+                        <i class="bi bi-search me-2"></i>Explorer
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-book text-info" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="card-title h4 mb-3">Rechercher une Filière</h3>
+                    <p class="card-text text-muted">
+                        Découvrez les filières adaptées à votre type de BAC avec leurs critères d'accès et débouchés
+                    </p>
+                    <a href="{{ path('app_orientation_filieres') }}" class="btn btn-info btn-lg mt-3">
+                        <i class="bi bi-list me-2"></i>Voir les filières
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-bar-chart text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="card-title h4 mb-3">Comparateur d'Écoles</h3>
+                    <p class="card-text text-muted">
+                        Comparez les coûts, durées de formation, taux d'insertion et accréditations des écoles
+                    </p>
+                    <a href="{{ path('app_orientation_comparateur') }}" class="btn btn-warning btn-lg mt-3">
+                        <i class="bi bi-shuffle me-2"></i>Comparer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm bg-light">
+        <div class="card-body p-4">
+            <h3 class="h5 mb-3">
+                <i class="bi bi-info-circle text-primary me-2"></i>Comment ça marche ?
+            </h3>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; padding-top: 5px;">1</span>
+                        <div>
+                            <h6 class="fw-semibold">Renseignez votre profil</h6>
+                            <p class="text-muted small">Type de BAC, moyenne, matières fortes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; padding-top: 5px;">2</span>
+                        <div>
+                            <h6 class="fw-semibold">Explorez les recommandations</h6>
+                            <p class="text-muted small">Filières compatibles, écoles adaptées</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; padding-top: 5px;">3</span>
+                        <div>
+                            <h6 class="fw-semibold">Prenez votre décision</h6>
+                            <p class="text-muted small">Comparez et choisissez la meilleure option</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15) !important;
+}
+</style>
+{% endblock %}

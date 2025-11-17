@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats - Conseiller Intelligent{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body p-4">
+                    <h2 class="h3 mb-3">
+                        <i class="bi bi-check-circle me-2"></i>Vos Recommandations Personnalisées
+                    </h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <i class="bi bi-mortarboard me-2"></i>
+                                <strong>Type de BAC :</strong> {{ typeBac.libelle }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <i class="bi bi-graph-up me-2"></i>
+                                <strong>Moyenne :</strong> {{ moyenne }}/20
+                            </p>
+                        </div>
+                    </div>
+                    <p class="mb-0 mt-2">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Nous avons trouvé <strong>{{ recommandations|length }}</strong> filière(s) compatible(s) avec votre profil
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if recommandations is empty %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Aucune filière ne correspond actuellement à votre profil. Essayez de modifier vos critères.
+        </div>
+    {% else %}
+        <div class="row g-4">
+            {% for recommandation in recommandations %}
+                <div class="col-lg-6">
+                    <div class="card h-100 border-0 shadow-sm {% if recommandation.score >= 75 %}border-start border-success border-4{% elseif recommandation.score >= 60 %}border-start border-primary border-4{% endif %}">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h4 class="card-title h5 mb-0">{{ recommandation.filiere.nom }}</h4>
+                                <span class="badge {% if recommandation.score >= 75 %}bg-success{% elseif recommandation.score >= 60 %}bg-primary{% elseif recommandation.score >= 40 %}bg-info{% else %}bg-secondary{% endif %} rounded-pill">
+                                    {{ recommandation.score }}%
+                                </span>
+                            </div>
+
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-building me-1"></i>{{ recommandation.filiere.ecole.nom }}
+                                {% if recommandation.filiere.ecole.estVerifiee %}
+                                    <i class="bi bi-patch-check-fill text-primary" title="École vérifiée"></i>
+                                {% endif %}
+                            </p>
+
+                            <div class="mb-3">
+                                <span class="badge bg-light text-dark border me-2">
+                                    <i class="bi bi-clock me-1"></i>{{ recommandation.filiere.dureeAnnees }} ans
+                                </span>
+                                <span class="badge bg-light text-dark border">
+                                    <i class="bi bi-currency-dollar me-1"></i>{{ recommandation.filiere.coutAnnuel|number_format(0, ',', ' ') }} FCFA/an
+                                </span>
+                            </div>
+
+                            <div class="mb-3">
+                                <strong class="d-block mb-2 text-{{ recommandation.score >= 60 ? 'success' : 'muted' }}">
+                                    <i class="bi bi-star-fill me-1"></i>{{ recommandation.niveau }}
+                                </strong>
+                            </div>
+
+                            {% if recommandation.raisons is not empty %}
+                                <div class="mb-3">
+                                    <h6 class="text-success small fw-semibold mb-2">
+                                        <i class="bi bi-check-circle me-1"></i>Points forts
+                                    </h6>
+                                    <ul class="small mb-0">
+                                        {% for raison in recommandation.raisons %}
+                                            <li>{{ raison }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+                            {% if recommandation.risques is not empty %}
+                                <div class="mb-3">
+                                    <h6 class="text-warning small fw-semibold mb-2">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>Points d'attention
+                                    </h6>
+                                    <ul class="small mb-0">
+                                        {% for risque in recommandation.risques %}
+                                            <li>{{ risque }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+                            <a href="{{ path('app_orientation_filiere_detail', {id: recommandation.filiere.id}) }}" class="btn btn-outline-primary btn-sm w-100">
+                                <i class="bi bi-eye me-1"></i>Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="mt-4 text-center">
+        <a href="{{ path('app_orientation_conseiller') }}" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left me-2"></i>Nouvelle recherche
+        </a>
+        <a href="{{ path('app_orientation_home') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-house me-2"></i>Retour à l'accueil
+        </a>
+    </div>
+</div>
+{% endblock %}

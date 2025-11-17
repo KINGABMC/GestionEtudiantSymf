@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ ecole.nom }} - Détails{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_orientation_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_orientation_ecoles') }}">Écoles</a></li>
+            <li class="breadcrumb-item active">{{ ecole.nom }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="h3 mb-0">{{ ecole.nom }}</h1>
+                        {% if ecole.estVerifiee %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-patch-check-fill me-1"></i>Vérifiée
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-muted mb-3">
+                        <i class="bi bi-geo-alt me-1"></i>{{ ecole.adresse }}, {{ ecole.ville }}, {{ ecole.region }}
+                    </p>
+
+                    <div class="mb-4">
+                        <span class="badge bg-{{ ecole.type == 'public' ? 'success' : 'info' }} fs-6">
+                            École {{ ecole.type|upper }}
+                        </span>
+                    </div>
+
+                    <h5 class="h6 mb-3">Présentation</h5>
+                    <p class="text-muted">{{ ecole.presentation ?? 'Aucune présentation disponible.' }}</p>
+
+                    {% if ecole.accreditations %}
+                        <h5 class="h6 mb-3 mt-4">Accréditations</h5>
+                        <p class="text-muted">
+                            <i class="bi bi-award me-2"></i>{{ ecole.accreditations }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="h6 mb-4">
+                        <i class="bi bi-book me-2"></i>Filières proposées ({{ ecole.filieres|length }})
+                    </h5>
+
+                    {% if ecole.filieres is empty %}
+                        <p class="text-muted">Aucune filière disponible pour le moment.</p>
+                    {% else %}
+                        <div class="list-group list-group-flush">
+                            {% for filiere in ecole.filieres %}
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">{{ filiere.nom }}</h6>
+                                            <p class="text-muted small mb-2">{{ filiere.description|slice(0, 100) }}...</p>
+                                            <div>
+                                                {% if filiere.moyenneMinimale %}
+                                                    <span class="badge bg-light text-dark border me-2">
+                                                        Min: {{ filiere.moyenneMinimale }}/20
+                                                    </span>
+                                                {% endif %}
+                                                <span class="badge bg-light text-dark border">
+                                                    {{ filiere.dureeAnnees }} ans
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <a href="{{ path('app_orientation_filiere_detail', {id: filiere.id}) }}" class="btn btn-sm btn-outline-primary">
+                                            Détails
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="h6 mb-4">Informations pratiques</h5>
+
+                    {% if ecole.coutScolarite %}
+                        <div class="mb-3">
+                            <i class="bi bi-currency-dollar text-primary me-2"></i>
+                            <strong>Coût de scolarité :</strong><br>
+                            <span class="text-muted">{{ ecole.coutScolarite|number_format(0, ',', ' ') }} FCFA</span>
+                        </div>
+                    {% endif %}
+
+                    {% if ecole.tauxInsertion %}
+                        <div class="mb-3">
+                            <i class="bi bi-briefcase text-success me-2"></i>
+                            <strong>Taux d'insertion :</strong><br>
+                            <span class="text-muted">{{ ecole.tauxInsertion }}%</span>
+                        </div>
+                    {% endif %}
+
+                    {% if ecole.telephone %}
+                        <div class="mb-3">
+                            <i class="bi bi-telephone text-info me-2"></i>
+                            <strong>Téléphone :</strong><br>
+                            <span class="text-muted">{{ ecole.telephone }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% if ecole.email %}
+                        <div class="mb-3">
+                            <i class="bi bi-envelope text-warning me-2"></i>
+                            <strong>Email :</strong><br>
+                            <a href="mailto:{{ ecole.email }}" class="text-muted">{{ ecole.email }}</a>
+                        </div>
+                    {% endif %}
+
+                    {% if ecole.siteWeb %}
+                        <div class="mb-3">
+                            <i class="bi bi-globe text-danger me-2"></i>
+                            <strong>Site web :</strong><br>
+                            <a href="{{ ecole.siteWeb }}" target="_blank" class="text-muted">{{ ecole.siteWeb }}</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{{ path('app_orientation_ecoles') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Retour aux écoles
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% if ecole.moyenneAvis > 0 %}
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <h6 class="mb-3">Note moyenne</h6>
+                        <div class="display-4 text-warning mb-2">
+                            {{ ecole.moyenneAvis }}<small class="h6">/5</small>
+                        </div>
+                        <div class="text-muted small">
+                            Basé sur {{ ecole.avis|length }} avis
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

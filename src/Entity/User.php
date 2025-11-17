@@ -14,7 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "type", type: "string")]
 #[ORM\DiscriminatorMap([
-    'employe' => Employe::class
+    'employe' => Employe::class,
+    'bachelier' => Bachelier::class
 ])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {

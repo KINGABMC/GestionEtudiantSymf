@@ -33,33 +33,49 @@
     
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-      {% if is_granted('ROLE_ADMIN') and app.user %}
         <li class="nav-item">
-          <a class="nav-link active" href="{{ path('app_home') }}">
+          <a class="nav-link" href="{{ path('app_orientation_home') }}">
             <i class="bi bi-house me-1"></i>
             Accueil
           </a>
         </li>
-         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_departement_list') }}">
-            <i class="bi bi-building me-1"></i>
-            Départements
-          </a>
-        </li>
-         {% endif %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_employe_list') }}">
-            <i class="bi bi-people me-1"></i>
-            Employés
+          <a class="nav-link" href="{{ path('app_orientation_ecoles') }}">
+            <i class="bi bi-building me-1"></i>
+            Écoles
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_orientation_filieres') }}">
+            <i class="bi bi-book me-1"></i>
+            Filières
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_orientation_conseiller') }}">
+            <i class="bi bi-compass me-1"></i>
+            Conseiller
+          </a>
+        </li>
+        {% if is_granted('ROLE_ADMIN') and app.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_departement_list') }}">
+              <i class="bi bi-shield me-1"></i>
+              Admin
+            </a>
+          </li>
+        {% endif %}
       </ul>
       
       <div class="navbar-nav">
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-person-circle me-1"></i>
-            {{ app.user ? app.user.nomComplet : 'User' }}
+            {% if app.user %}
+              {{ app.user.nomComplet ?? 'Utilisateur' }}
+            {% else %}
+              Invité
+            {% endif %}
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"> {{ app.user ? app.user.roles[0] : '' }}</i></a></li>
