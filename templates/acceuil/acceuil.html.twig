@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil - Gestion des Départements</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Style global -->
+  <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <!-- ====== NAVBAR ====== -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">
+        <i class="bi bi-building me-2"></i>
+        Gestion des Départements
+      </a>
+  </nav>
+  <!-- ====== CONTENU PRINCIPAL ====== -->
+  <div class="container py-5 text-center">
+    <div class="card shadow-sm mx-auto" style="max-width: 700px;">
+      <div class="card-body">
+        <h1 class="h3 mb-3 text-primary fw-semibold">
+          Bienvenue dans l’application de gestion des départements
+        </h1>
+        <p class="text-muted mb-4">
+          Utilisez le menu de navigation pour accéder aux employés ou aux départements de votre entreprise.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3">
+          <a href="{{ path('app_employe_list') }}" class="btn btn-primary">
+            <i class="bi bi-people me-1"></i> Voir les Employés
+          </a>
+          <a href="{{ path('app_departement_list') }}" class="btn btn-outline-primary">
+            <i class="bi bi-building me-1"></i> Voir les Départements
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="text-center py-3 text-muted small mt-5">
+    © {{ "now"|date("Y") }} Gestion des Départements — Créé avec ❤️ par votre équipe
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
