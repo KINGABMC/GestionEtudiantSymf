@@ -105,10 +105,41 @@
                         </div>
                     {% endif %}
 
+                    {% if filiere.moyenneAvis > 0 %}
+                        <div class="card border-warning bg-light">
+                            <div class="card-body p-3">
+                                <h6 class="mb-2">
+                                    <i class="bi bi-star-fill text-warning me-2"></i>Note globale
+                                </h6>
+                                <div class="text-warning mb-2">
+                                    {% for i in 1..filiere.moyenneAvis|round %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% endfor %}
+                                    {% for i in 1..(5-filiere.moyenneAvis|round) %}
+                                        <i class="bi bi-star"></i>
+                                    {% endfor %}
+                                </div>
+                                <p class="small text-muted mb-0">
+                                    {{ filiere.moyenneAvis }}/5 ({{ filiere.avis|length }} avis)
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     <div class="d-grid gap-2 mt-4">
                         <a href="{{ path('app_orientation_ecole_detail', {id: filiere.ecole.id}) }}" class="btn btn-primary">
                             <i class="bi bi-building me-2"></i>Voir l'école
                         </a>
+                        {% if app.user %}
+                            <a href="{{ path('app_avis_filiere_add', {id: filiere.id}) }}" class="btn btn-outline-success">
+                                <i class="bi bi-pencil me-2"></i>Ajouter un avis
+                            </a>
+                        {% endif %}
+                        {% if filiere.avis|length > 0 %}
+                            <a href="{{ path('app_avis_filiere_liste', {id: filiere.id}) }}" class="btn btn-outline-info">
+                                <i class="bi bi-chat-dots me-2"></i>Voir les avis
+                            </a>
+                        {% endif %}
                         <a href="{{ path('app_orientation_filieres') }}" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left me-2"></i>Retour aux filières
                         </a>

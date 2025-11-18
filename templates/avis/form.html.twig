@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un avis - Orientation{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_orientation_home') }}">Accueil</a></li>
+            {% if ecole %}
+                <li class="breadcrumb-item"><a href="{{ path('app_orientation_ecole_detail', {id: ecole.id}) }}">{{ ecole.nom }}</a></li>
+                <li class="breadcrumb-item active">Ajouter un avis</li>
+            {% elseif filiere %}
+                <li class="breadcrumb-item"><a href="{{ path('app_orientation_filiere_detail', {id: filiere.id}) }}">{{ filiere.nom }}</a></li>
+                <li class="breadcrumb-item active">Ajouter un avis</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h3 mb-2">{{ titre }}</h2>
+                    <p class="text-muted mb-4">
+                        Partagez votre expérience pour aider les futurs étudiants
+                    </p>
+
+                    {% include 'components/messageflash.html.twig' with {'messages': app.flashes()} %}
+
+                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label class="form-label fw-semibold mb-0">
+                                <i class="bi bi-star-fill text-warning me-2"></i>{{ form.note.label }}
+                            </label>
+                        </div>
+
+                        {% if form.note.vars.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {% for error in form.note.vars.errors %}
+                                    {{ error.message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="btn-group w-100" role="group">
+                            {% for key, choice in form.note.vars.choices %}
+                                {% set id = 'note_' ~ key %}
+                                <input
+                                    type="radio"
+                                    class="btn-check"
+                                    name="avis_type[note]"
+                                    id="{{ id }}"
+                                    value="{{ choice.value }}"
+                                    {% if form.note.vars.data == choice.value %}checked{% endif %}
+                                >
+                                <label class="btn btn-outline-warning" for="{{ id }}">
+                                    <i class="bi bi-star-fill me-1"></i>{{ choice.label|striptags }}
+                                </label>
+                            {% endfor %}
+                        </div>
+
+                        {% if form.note.vars.help %}
+                            <small class="form-text text-muted d-block mt-2">
+                                {{ form.note.vars.help }}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_row(form.auteur, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_row(form.commentaire, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+                    </div>
+
+                    <div class="alert alert-info border-0">
+                        <i class="bi bi-lightbulb me-2"></i>
+                        <strong>Conseils :</strong>
+                        <ul class="mb-0 small mt-2">
+                            <li>Soyez honnête et constructif</li>
+                            <li>Évitez les insultes et le harcèlement</li>
+                            <li>Basez-vous sur votre expérience personnelle</li>
+                            <li>Vos avis seront modérés avant publication</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Soumettre mon avis
+                        </button>
+                        {% if ecole %}
+                            <a href="{{ path('app_orientation_ecole_detail', {id: ecole.id}) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Annuler
+                            </a>
+                        {% elseif filiere %}
+                            <a href="{{ path('app_orientation_filiere_detail', {id: filiere.id}) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Annuler
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

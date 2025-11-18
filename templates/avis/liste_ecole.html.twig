@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis - {{ ecole.nom }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_orientation_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_orientation_ecole_detail', {id: ecole.id}) }}">{{ ecole.nom }}</a></li>
+            <li class="breadcrumb-item active">Avis</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h2 class="h3 mb-2">Avis sur {{ ecole.nom }}</h2>
+                            <p class="text-muted mb-0">
+                                <i class="bi bi-chat-dots me-2"></i>
+                                <strong>{{ total }}</strong> avis
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                            {% if ecole.moyenneAvis > 0 %}
+                                <div class="display-6 text-warning mb-2">
+                                    {% for i in 1..ecole.moyenneAvis|round %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% endfor %}
+                                    {% for i in 1..(5-ecole.moyenneAvis|round) %}
+                                        <i class="bi bi-star"></i>
+                                    {% endfor %}
+                                </div>
+                                <p class="text-muted">
+                                    Note moyenne: <strong>{{ ecole.moyenneAvis }}/5</strong>
+                                </p>
+                            {% else %}
+                                <p class="text-muted">
+                                    <i class="bi bi-info-circle me-2"></i>Aucun avis pour le moment
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if app.user %}
+        <div class="mb-4">
+            <a href="{{ path('app_avis_ecole_add', {id: ecole.id}) }}" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle me-2"></i>Ajouter un avis
+            </a>
+        </div>
+    {% else %}
+        <div class="alert alert-info mb-4">
+            <i class="bi bi-info-circle me-2"></i>
+            <a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter un avis
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        {% if avis|length > 0 %}
+            {% for avi in avis %}
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <div class="text-warning mb-2">
+                                        {% for i in 1..avi.note %}
+                                            <i class="bi bi-star-fill"></i>
+                                        {% endfor %}
+                                        {% for i in 1..(5-avi.note) %}
+                                            <i class="bi bi-star"></i>
+                                        {% endfor %}
+                                    </div>
+                                    <h6 class="mb-1">
+                                        {{ avi.auteur ?? 'Utilisateur anonyme' }}
+                                        {% if avi.estVerifie %}
+                                            <span class="badge bg-success ms-2" title="Avis vérifié">
+                                                <i class="bi bi-patch-check-fill"></i> Vérifié
+                                            </span>
+                                        {% endif %}
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar me-1"></i>
+                                        {{ avi.createdAt|date('d/m/Y') }}
+                                    </small>
+                                </div>
+                                {% if app.user and (app.user.id == avi.user.id or is_granted('ROLE_ADMIN')) %}
+                                    <form method="post" action="{{ path('app_avis_delete', {id: avi.id}) }}" style="display: inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avi.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr?')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+
+                            {% if avi.commentaire %}
+                                <p class="card-text text-muted mt-3">
+                                    {{ avi.commentaire }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>Aucun avis publié pour le moment. Soyez le premier !
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if nbrPages > 1 %}
+        {% include 'components/pagination.html.twig' with {
+            'nbrPages': nbrPages,
+            'currentPage': currentPage,
+            'pathname': 'app_avis_ecole_liste',
+            'extraParams': {'id': ecole.id}
+        } %}
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{{ path('app_orientation_ecole_detail', {id: ecole.id}) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Retour à l'école
+        </a>
+    </div>
+</div>
+{% endblock %}
